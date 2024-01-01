@@ -35,6 +35,6 @@ app.register_blueprint(auth)
 app.register_blueprint(landing)
 
 if __name__ == "__main__":
-    app.run(port=8000, host='localhost', ssl_context='adhoc')
+    app.run(port=8000, host='localhost')
 
 

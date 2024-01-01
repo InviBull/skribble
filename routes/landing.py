@@ -8,5 +8,4 @@ def landingPage():
     if current_user.is_authenticated:
         return ('loggedin')
     else:
-        return ('not loggedin')
-    return render_template('index.html')
+        return render_template('index.html')
