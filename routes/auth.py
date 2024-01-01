@@ -26,7 +26,7 @@ def login():
 
     return redirect(request_uri)
 
-@auth.route('/auth/google/callback')
+@auth.route('/auth/login/callback')
 def googleCallback():
     code = request.args.get("code")
     cfg = get_google_provider_cfg()
@@ -67,7 +67,8 @@ def googleCallback():
         mutate("INSERT INTO users (id, name, email, avatar) values (?, ?, ?, ?)", (id, name, email, avatar,))
         user = query("SELECT id FROM users where id = ?", (id,))
 
-    login_user(user)
+    print(user)
+    # login_user(user[0][0])
     return redirect('/')
 
 @auth.route('/auth/logout')
