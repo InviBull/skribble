@@ -25,7 +25,9 @@ login_manager.init_app(app)
 def load_user(userid):
     u = query("SELECT * FROM users where id = ?", (userid,))
     try:
-        return User(id=u[0], email=u[1], name=u[2], avatar=[3])
+        user = User(id=u[0], email=u[1], name=u[2], avatar=[3])
+        print(user.id)
+        return user
     except IndexError:
         return User(None)
 
