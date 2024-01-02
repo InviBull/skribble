@@ -6,6 +6,7 @@ landing = Blueprint('landing', __name__, template_folder='templates')
 @landing.route('/')
 def landingPage():
     if current_user.is_authenticated:
+        print(current_user.id)
         return render_template('index.html')
     else:
         return ('<a href="/auth/login">Login</a>')
