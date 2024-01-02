@@ -54,7 +54,7 @@ def delete_notebook(user_id, notebook_id):
     mutate("DELETE FROM notebooks WHERE user_id = ? AND notebook_id = ?", (user_id, notebook_id))
 
 def get_notebooks(user_id):
-    return query("SELECT * FROM notebooks WHERE user_id = ?", (user_id))
+    return query("SELECT * FROM notebooks WHERE user_id = ?", (user_id, ))
 
 def get_notebook(user_id, notebook_id):
     return query("SELECT * FROM notebooks WHERE user_id = ? AND notebook_id = ?", (user_id, notebook_id))
