@@ -1,11 +1,7 @@
 import sqlite3
-import utils.error as err
 
 def create_connection():
-    try:
-        return sqlite3.connect("skribble.db")
-    except sqlite3.Error as e:
-        err.ConnectError("Couldn't connect to Database")
+    return sqlite3.connect("skribble.db")
 
 def create_tables():
     conn = create_connection()

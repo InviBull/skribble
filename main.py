@@ -1,4 +1,6 @@
 from dotenv import load_dotenv
+
+from db.models import User
 load_dotenv()
 
 from flask import Flask
@@ -21,11 +23,11 @@ login_manager.init_app(app)
 
 @login_manager.user_loader
 def load_user(userid):
-    u = query("SELECT * FROM users where id = ?", (userid))
+    u = query("SELECT * FROM users where id = ?", (userid,))
     try:
-        return u[0]
+        return User(id=u[0], email=u[1], name=u[2], avatar=[3])
     except IndexError:
-        return None
+        return User(None)
 
 @app.route('/health')
 def health():
