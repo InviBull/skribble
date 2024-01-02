@@ -10,6 +10,7 @@ from utils.env import env
 from db.db import create_tables, query 
 from routes.auth import auth
 from routes.landing import landing
+from routes.notebooks import notebooks
 
 create_tables()
 
@@ -33,6 +34,7 @@ def health():
 
 app.register_blueprint(auth)
 app.register_blueprint(landing)
+app.register_blueprint(notebooks)
 
 if __name__ == "__main__":
     app.run(port=8000, host='localhost')
