@@ -3,6 +3,7 @@ from flask_login import login_required, login_user, logout_user
 from oauthlib.oauth2 import WebApplicationClient
 import requests
 import json
+from db.models import User
 
 from utils.env import env
 from db.db import mutate, query
@@ -67,8 +68,7 @@ def googleCallback():
         mutate("INSERT INTO users (id, name, email, avatar) values (?, ?, ?, ?)", (id, name, email, avatar,))
         user = query("SELECT id FROM users where id = ?", (id,))
 
-    print(user)
-    # login_user(user[0][0])
+    login_user(User(user[0][0]))
     return redirect('/')
 
 @auth.route('/auth/logout')
