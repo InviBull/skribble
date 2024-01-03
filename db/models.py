@@ -3,7 +3,7 @@ class User:
         self.id = id
         self.email = email
         self.name = name
-        self.avatar = name
+        self.avatar = avatar
         self.active = True
 
     def is_active(self):

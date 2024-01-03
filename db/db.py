@@ -62,7 +62,7 @@ def get_notebook(user_id, notebook_id):
 def add_note(user_id, notebook_id, note_id, note_name):
     mutate("INSERT INTO notes VALUES (?, ?, ?, ?)", (user_id, notebook_id, note_id, note_name))
 
-def delete_notebook(user_id, notebook_id, note_id):
+def delete_note(user_id, notebook_id, note_id):
     mutate("DELETE FROM notes WHERE user_id = ? AND notebook_id = ? AND note_id = ?", (user_id, notebook_id, note_id))
 
 def get_notes(user_id, notebook_id):
