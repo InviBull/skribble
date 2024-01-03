@@ -28,7 +28,7 @@ def load_user(userid):
         user = User(id=u[0], email=u[1], name=u[2], avatar=[3])
         return user
     except IndexError:
-        return User(None)
+        return User(id=None)
 
 @app.route('/health')
 def health():
