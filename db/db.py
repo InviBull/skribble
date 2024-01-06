@@ -17,15 +17,16 @@ def create_tables():
                 );
                 CREATE TABLE IF NOT EXISTS notebooks (
                     user_id TEXT,
-                    notebook_id TEXT,
+                    notebook_id TEXT UNIQUE,
                     notebook_name TEXT,
                     FOREIGN KEY (user_id) REFERENCES users(id)
                 );
                 CREATE TABLE IF NOT EXISTS notes (
                     user_id TEXT,
                     notebook_id TEXT,
-                    note_id TEXT,
+                    note_id TEXT UNIQUE,
                     note_name TEXT,
+                    note_content TEXT,
                     FOREIGN KEY (user_id) REFERENCES users(id),
                     FOREIGN KEY (notebook_id) REFERENCES notebooks(notebook_id)
                 );
@@ -51,6 +52,7 @@ def add_notebook(user_id, notebook_id, notebook_name):
     mutate("INSERT INTO notebooks VALUES (?, ?, ?)", (user_id, notebook_id, notebook_name))
 
 def delete_notebook(user_id, notebook_id):
+    print("HERE")
     mutate("DELETE FROM notebooks WHERE user_id = ? AND notebook_id = ?", (user_id, notebook_id))
 
 def get_notebooks(user_id):
