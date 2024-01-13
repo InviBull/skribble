@@ -1,0 +1,3 @@
+# skribble
+
+In the ever-expanding digital landscape, note-taking remains a fundamental pillar of organisation and creativity. Yet, existing applications often feel rigid and impersonal, failing to capture the dynamism of thought. Skribble, our Python-powered notes application, takes a stand against the mundane, offering a vibrant canvas for your ideas to flourish. Imagine a platform where code snippets dance alongside hand-drawn sketches, where mind maps explode with vibrant colours, and where text seamlessly integrates with audio recordings. Skribble isn't just a notes app; it's a playground for your intellect, a breeding ground for innovation, and a testament to the boundless potential of Python in shaping the future of digital expression.
