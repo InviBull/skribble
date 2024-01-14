@@ -10,34 +10,20 @@
     <nav class="nav">
       Skribble
     </nav>
-
-
-    <p>{{name}}'s Notebook</p>
-    {% for note in notes %}
-    <p><a href="{{ url_for('note', id=note.id) }}">{{ note.title }}</a></p>
-    {% endfor %} -->
-
-    <form action="{{ url_for('add_note') }}" method="post">
-        <input type="text" name="title" placeholder="Title">
-        <input type="text" name="text" placeholder="Text">
-        <input type="submit" value="Add Note">
-    </form>
-
-    <!-- <section class="main-section">
-      <div class="main-section__header">
-        <h2 class="main-section__header__title">My Notebooks</h2>
-        <p class="main-section__header__count">{{length}} Notebooks</p>
+    <section class="sidebar">
+      <div class="sidebar__header">
+        <h2 class="sidebar__header__title">{{name}'s Notebook}</h2>
       </div>
       <div>
-        <button data-modal="new-notebook-modal">Create New Notebook</button>
+        <button data-modal="new-page-modal">Create New Note</button>
       </div>
     </section>
 
-    <div class="modal" id="new-notebook-modal">
+    <div class="modal" id="new-page-modal">
       <div class="modal__bg modal__exit"></div>
       <div class="modal__content">
         <div class="modal__content__header">
-          <h2 class="modal__content__header__title">Create New Notebook</h2>
+          <h2 class="modal__content__header__title">Create New Note</h2>
         </div>
         <div class="modal__content__body">
           <form action="/notebooks" method="POST">
@@ -69,6 +55,6 @@
           })
         })
       })
-    </script> -->
+    </script>
   </body>
 </html>
