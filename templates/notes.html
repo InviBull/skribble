@@ -10,9 +10,21 @@
     <nav class="nav">
       Skribble
     </nav>
-    <section class="sidebar">
-      <div class="sidebar__header">
-        <h2 class="sidebar__header__title">{{name}'s Notebook}</h2>
+
+    <section class="main-section">
+      <p>{{ notebook[2] }}</p>
+
+      {% for note in notes %}
+        <p>
+          <a href="/{{ notebook_id }}/{{ note[0] }}">{{ note[1] }}</a>
+        </p>
+      {% endfor %}
+    </section>
+
+    <!-- <section class="main-section">
+      <div class="main-section__header">
+        <h2 class="main-section__header__title">My Notebooks</h2>
+        <p class="main-section__header__count">{{length}} Notebooks</p>
       </div>
       <div>
         <button data-modal="new-page-modal">Create New Note</button>
