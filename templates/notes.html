@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>{}</title>
+</head>
+
+<body>
+    <h1>Skribble</h1>
+
+    <p>{% name %}'s Notebook</p>
+    {% for note in notes %}
+    <p><a href="{{ url_for('note', id=note.id) }}">{{ note.title }}</a></p>
+    {% endfor %}
+
+    <form action="{{ url_for('add_note') }}" method="post">
+        <input type="text" name="title" placeholder="Title">
+        <input type="text" name="text" placeholder="Text">
+        <input type="submit" value="Add Note">
+    </form>
+</body>
+
+</html>
