@@ -29,5 +29,29 @@ def retrieve_notebooks():
 @notebooks.route('/<notebook_id>')
 @login_required
 def retrieve_notebook(notebook_id):
-    get_notebook(current_user.id, notebook_id)
-    return render_template('notes.html', name=current_user.name, notebook_id=notebook_id)
+    notebook = get_notebook(current_user.id, notebook_id)
+    if len(notebook) == 0:
+        return '<p>Notebook not found</p>'
+
+    notebook = notebook[0]
+    if notebook[0] != current_user.id:
+        return '<p>Unauthorized</p>'
+
+    # get all notes of notebook
+    notes = []
+
+    return render_template('notes.html', name=current_user.name, notebook_id=notebook_id, notebook=notebook, notes=notes)
+
+@notebooks.route('/<notebook_id>/notes', methods=['POST'])
+@login_required
+def create_note(notebook_id):
+    return redirect(f"/{notebook_id}")
+
+
+
+
+
+
+
+
+
