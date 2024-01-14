@@ -16,7 +16,35 @@
         <p class="main-section__header__count">{{length}} Notebooks</p>
       </div>
       <div>
-        <button data-modal="new-notebook-modal">Create New Notebook</button>
+        <button data-modal="new-notebook-modal" class="new-notebook-button">
+          <p>Create New Notebook</p>
+          <svg width="20" height="20" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20.5834 14.0833H14.0834V20.5833H11.9167V14.0833H5.41675V11.9167H11.9167V5.41667H14.0834V11.9167H20.5834V14.0833Z" fill="#245AE4"/>
+          </svg>
+        </button>
+
+        {% for notebook in notebooks %}
+          <a href="{{ '/%s'%notebook[1] }}">
+            <div class="card">
+              <div class="card__leading">
+                <div class="card__leading__icon">
+                  {{ notebook[2].0 }}
+                </div>
+                <span class="card__leading__name">{{ notebook[2] }}</span>
+              </div>
+              <div>
+                <form action="/notebooks/delete" method="POST">
+                  <input type="hidden" name="notebook_id" value="{{ notebook[1] }}"/>
+                  <button type="submit" style="background: transparent; outline: none; border: none; cursor: pointer;">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M15.8334 3.33333H12.9167L12.0834 2.5H7.91675L7.08341 3.33333H4.16675V5H15.8334M5.00008 15.8333C5.00008 16.2754 5.17568 16.6993 5.48824 17.0118C5.8008 17.3244 6.22472 17.5 6.66675 17.5H13.3334C13.7754 17.5 14.1994 17.3244 14.5119 17.0118C14.8245 16.6993 15.0001 16.2754 15.0001 15.8333V5.83333H5.00008V15.8333Z" fill="#CF0303"/>
+                    </svg> 
+                  </button>
+                </form>
+              </div>
+            </div>
+          </a>
+        {% endfor %}
       </div>
     </section>
 
@@ -28,7 +56,7 @@
         </div>
         <div class="modal__content__body">
           <form action="/notebooks" method="POST">
-            <input class="modal__content__body__input" type="text" name="notebook_name" id="notebook_name" placeholder="Name" required>
+            <input autofocus="true" class="modal__content__body__input" type="text" name="notebook_name" id="notebook_name_input" placeholder="Name" required>
             <button class="modal__content__body__submit" type="submit">Create</button>
           </form>
         </div>
@@ -42,10 +70,12 @@
         trigger.addEventListener('click', (e) => {
           e.preventDefault();
 
-          console.log('click')
           const modal = document.getElementById(trigger.dataset.modal)
-          console.log(modal)
           modal.classList.add('open')
+          const input = document.getElementById('notebook_name_input')
+          console.log(input)
+          input.setAttribute('tabindex', '0')
+          input.focus()
 
           const exits = modal.querySelectorAll('.modal__exit')
           exits.forEach(exit => {

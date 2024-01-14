@@ -14,7 +14,7 @@ def create_notebook():
     add_notebook(current_user.id, notebook_id, notebook_name)
     return redirect(f"/{notebook_id}")
 
-@notebooks.route('/notebooks', methods=['DELETE'])
+@notebooks.route('/notebooks/delete', methods=['POST'])
 @login_required
 def remove_notebook():
     notebook_id = request.form.get("notebook_id")
