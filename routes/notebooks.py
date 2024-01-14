@@ -1,8 +1,8 @@
-from flask import Blueprint, redirect, request
+from flask import Blueprint, redirect, request, render_template
 from flask_login import login_required, current_user
 from uuid import uuid4
 
-from db.db import add_notebook, delete_notebook, get_notebooks
+from db.db import add_notebook, delete_notebook, get_notebooks, get_notebook
 
 notebooks = Blueprint('notebooks', __name__, template_folder='templates')
 
@@ -25,3 +25,9 @@ def remove_notebook():
 @login_required
 def retrieve_notebooks():
     return get_notebooks(current_user.id)
+
+@notebooks.route('/<notebook_id>')
+@login_required
+def retrieve_notebook(notebook_id):
+    get_notebook(current_user.id, notebook_id)
+    return render_template('notes.html', name=current_user.name, notebook_id=notebook_id)
