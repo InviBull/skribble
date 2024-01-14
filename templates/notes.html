@@ -19,13 +19,6 @@
           <a href="/{{ notebook_id }}/{{ note[0] }}">{{ note[1] }}</a>
         </p>
       {% endfor %}
-    </section>
-
-    <!-- <section class="main-section">
-      <div class="main-section__header">
-        <h2 class="main-section__header__title">My Notebooks</h2>
-        <p class="main-section__header__count">{{length}} Notebooks</p>
-      </div>
       <div>
         <button data-modal="new-page-modal">Create New Note</button>
       </div>
@@ -38,8 +31,8 @@
           <h2 class="modal__content__header__title">Create New Note</h2>
         </div>
         <div class="modal__content__body">
-          <form action="/notebooks" method="POST">
-            <input class="modal__content__body__input" type="text" name="notebook_name" id="notebook_name" placeholder="Name" required>
+          <form action="/{{ notebook_id }}/notes" method="POST">
+            <input class="modal__content__body__input" type="text" name="note_name" id="note_name" placeholder="Name" required>
             <button class="modal__content__body__submit" type="submit">Create</button>
           </form>
         </div>

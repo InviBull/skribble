@@ -6,3 +6,4 @@ oauthlib
 pyopenssl
 flask-login
 uuid
+requests

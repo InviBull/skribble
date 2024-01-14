@@ -2,7 +2,7 @@ from flask import Blueprint, redirect, request, render_template
 from flask_login import login_required, current_user
 from uuid import uuid4
 
-from db.db import add_notebook, delete_notebook, get_notebooks, get_notebook
+from db.db import *
 
 notebooks = Blueprint('notebooks', __name__, template_folder='templates')
 
@@ -37,14 +37,16 @@ def retrieve_notebook(notebook_id):
     if notebook[0] != current_user.id:
         return '<p>Unauthorized</p>'
 
-    # get all notes of notebook
-    notes = []
+    notes = get_notes(current_user.id, notebook_id)
 
     return render_template('notes.html', name=current_user.name, notebook_id=notebook_id, notebook=notebook, notes=notes)
 
 @notebooks.route('/<notebook_id>/notes', methods=['POST'])
 @login_required
 def create_note(notebook_id):
+    note_name = request.form.get("note_name")
+    note_id = str(uuid4())
+    add_note(current_user.id, notebook_id, note_id, note_name, "")
     return redirect(f"/{notebook_id}")
 
 
