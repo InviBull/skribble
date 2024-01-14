@@ -1,5 +1,7 @@
 * {
   font-family: "Inter";
+  underline: none;
+  text-decoration: none;
 }
 
 body {
@@ -25,7 +27,7 @@ body {
 .main-section {
   display: flex;
   flex-direction: column;
-  width: 60vw;
+  width: 50vw;
   margin: 0 auto;
   padding-top: 100px;
 }
@@ -48,6 +50,63 @@ body {
   color: #7B7B7B;
   font-weight: 700;
   font-size: 16px;
+}
+
+.new-notebook-button {
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 10px;
+  border: 2px solid rgba(36, 90, 228, 0.10);
+  background: rgba(36, 90, 228, 0.05);
+  height: 60px;
+  color: #245AE4;
+  font-weight: 700;
+  font-size: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  cursor: pointer;
+}
+
+.card {
+  display: flex;
+  background: #fff;
+  width: calc(100% - 16px);
+  height: 60px;
+  margin-top: 16px;
+  border-radius: 10px;
+
+  justify-content: space-between;
+  align-items: center;
+  padding-right: 16px;
+}
+
+.card__leading {
+  display: flex;
+  align-items: center;
+  padding-left: 10px;
+}
+
+.card__leading__icon {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+  background: #F3F3F3;
+
+  color: #2C2C2C;
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.card__leading__name {
+  color: #4B4B4B; 
+  font-size: 15px;
+  font-weight: 600;
+  margin-left: 16px;
 }
 
 .modal {
@@ -88,7 +147,6 @@ body {
   display: flex;
   justify-content: start;
   margin-right: 60px;
-  background: #f00;
 }
 
 .modal__content__header__title {
@@ -102,11 +160,11 @@ body {
 }
 
 .modal__content__body form {
-  background: #0f0;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: end;
+  width: 100%;
 }
 
 .modal__content__body__submit {
@@ -117,16 +175,19 @@ body {
   padding: 14px 22px;
   color: #fff;
   font-weight: 600;
-  font-size: 14px;
+  font-size: 13px;
   cursor: pointer;
 }
 
 .modal__content__body__input {
-  width: 100%;
+  width: calc(100% - 25px);
+  margin-left: 0;
+  margin-right: 0;
   margin-bottom: 20px;
   height: 45px;
   border-radius: 6px;
   border: 3px solid #A4A4A4;
   background: #FFF;
+  padding: 0 10px;
 }
 
