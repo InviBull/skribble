@@ -52,7 +52,6 @@ def add_notebook(user_id, notebook_id, notebook_name):
     mutate("INSERT INTO notebooks VALUES (?, ?, ?)", (user_id, notebook_id, notebook_name))
 
 def delete_notebook(user_id, notebook_id):
-    print("HERE")
     mutate("DELETE FROM notebooks WHERE user_id = ? AND notebook_id = ?", (user_id, notebook_id))
 
 def get_notebooks(user_id):
