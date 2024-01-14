@@ -1,6 +1,6 @@
 flask
 markupsafe==2.0.1
-werkzeug==2.0.3
+werkzeug
 python-dotenv
 oauthlib
 pyopenssl

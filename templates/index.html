@@ -2,8 +2,60 @@
 <html lang="en">
   <head>
     <title>Skribble</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='css/home.css')}}"/>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter&wghts=100,200,300,400,500,600,700,800">
   </head>
   <body>
-    <h1>Skribble!</h1>
+
+    <nav class="nav">
+      Skribble
+    </nav>
+    <section class="main-section">
+      <div class="main-section__header">
+        <h2 class="main-section__header__title">My Notebooks</h2>
+        <p class="main-section__header__count">{{length}} Notebooks</p>
+      </div>
+      <div>
+        <button data-modal="new-notebook-modal">Create New Notebook</button>
+      </div>
+    </section>
+
+    <div class="modal" id="new-notebook-modal">
+      <div class="modal__bg modal__exit"></div>
+      <div class="modal__content">
+        <div class="modal__content__header">
+          <h2 class="modal__content__header__title">Create New Notebook</h2>
+        </div>
+        <div class="modal__content__body">
+          <form action="/notebooks" method="POST">
+            <input class="modal__content__body__input" type="text" name="notebook_name" id="notebook_name" placeholder="Name" required>
+            <button class="modal__content__body__submit" type="submit">Create</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const modals = document.querySelectorAll('[data-modal]')
+
+      modals.forEach((trigger) => {
+        trigger.addEventListener('click', (e) => {
+          e.preventDefault();
+
+          console.log('click')
+          const modal = document.getElementById(trigger.dataset.modal)
+          console.log(modal)
+          modal.classList.add('open')
+
+          const exits = modal.querySelectorAll('.modal__exit')
+          exits.forEach(exit => {
+            exit.addEventListener('click', e => {
+              e.preventDefault();
+              modal.classList.remove('open')
+            })
+          })
+        })
+      })
+    </script>
   </body>
 </html>

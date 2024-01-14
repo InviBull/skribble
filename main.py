@@ -1,9 +1,10 @@
 from dotenv import load_dotenv
+import os
 
 from db.models import User
 load_dotenv()
 
-from flask import Flask
+from flask import Flask, url_for
 from flask_login import (
         LoginManager
 )
@@ -38,6 +39,19 @@ def health():
 app.register_blueprint(auth)
 app.register_blueprint(landing)
 app.register_blueprint(notebooks)
+
+# Refresh CSS
+@app.context_processor
+def override_url_for():
+    return dict(url_for=dated_url_for)
+
+def dated_url_for(endpoint, **values):
+    if endpoint == 'static':
+        filename = values.get('filename', None)
+        if filename:
+            file_path = os.path.join(app.root_path, endpoint, filename)
+            values['q'] = int(os.stat(file_path).st_mtime)
+    return url_for(endpoint, **values)
 
 if __name__ == "__main__":
     app.run(port=8000, host='localhost')
