@@ -22,6 +22,7 @@ app.secret_key = env("SECRET_KEY")
 
 login_manager = LoginManager()
 login_manager.init_app(app)
+login_manager.login_view = '/'
 
 @login_manager.user_loader
 def load_user(userid):
@@ -30,7 +31,7 @@ def load_user(userid):
         user = User(id=u[0], email=u[1], name=u[2], avatar=[3])
         return user
     except IndexError:
-        return User(id=None)
+        return None
 
 @app.route('/health')
 def health():
@@ -54,6 +55,6 @@ def dated_url_for(endpoint, **values):
     return url_for(endpoint, **values)
 
 if __name__ == "__main__":
-    app.run(debug=True, port=9989, host='localhost')
+    app.run(debug=True, port=8000, host='localhost')
 
 

@@ -12,4 +12,4 @@ def landingPage():
         print(notebooks)
         return render_template('index.html', length=len(notebooks), notebooks=notebooks)
     else:
-        return ('<a href="/auth/login">Login</a>')
+        return render_template('landing.html')

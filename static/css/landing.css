@@ -1,0 +1,35 @@
+* {
+  font-family: "Inter";
+  underline: none;
+  text-decoration: none;
+  color: #2C2C2C;
+}
+
+body {
+  background-color: #f8f8f8;
+}
+
+.nav {
+  width: 100vw;
+  height: 60px;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  border-bottom: solid 2px #E8E8E8;
+  position: fixed;
+  top: 0;
+  left: 0;
+
+  font-weight: 700;
+  color: #2C2C2C;
+  font-size: 18px;
+}
+
+.main-section {
+  display: flex;
+  width: 100%;
+  height: calc(100vh - 60px);
+
+  justify-content: center;
+  align-items: center;
+}

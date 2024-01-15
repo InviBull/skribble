@@ -30,16 +30,26 @@ def retrieve_notebooks():
 @login_required
 def retrieve_notebook(notebook_id):
     notebook = get_notebook(current_user.id, notebook_id)
+    noteid = request.args.get('noteid')
+
     if len(notebook) == 0:
-        return '<p>Notebook not found</p>'
+        return render_template('error.html', message="Notebook Not Found")
 
     notebook = notebook[0]
     if notebook[0] != current_user.id:
-        return '<p>Unauthorized</p>'
+        return render_template('error.html', message="Unauthorised!")
 
     notes = get_notes(current_user.id, notebook_id)
 
-    return render_template('notes.html', name=current_user.name, notebook_id=notebook_id, notebook=notebook, notes=notes)
+    if noteid is None:
+        return render_template('notebook.html', name=current_user.name, notebook_id=notebook_id, notebook=notebook, notes=notes, length=len(notes))
+    else:
+        note = get_note(current_user.id, notebook_id, noteid)
+
+        if len(note) == 0:
+            return render_template('error.html', message="Note Not Found")
+
+        return render_template('editnote.html', name=current_user.name, notebook_id=notebook_id, notebook=notebook, notes=notes)
 
 @notebooks.route('/<notebook_id>/notes', methods=['POST'])
 @login_required
@@ -47,6 +57,14 @@ def create_note(notebook_id):
     note_name = request.form.get("note_name")
     note_id = str(uuid4())
     add_note(current_user.id, notebook_id, note_id, note_name, "")
+    return redirect(f"/{notebook_id}?noteid={note_id}")
+
+@notebooks.route('/notebooks/note/delete', methods=['POST'])
+@login_required
+def remove_note():
+    notebook_id = request.form.get("notebook_id")
+    note_id = request.form.get("note_id")
+    delete_note(current_user.id, notebook_id, note_id)
     return redirect(f"/{notebook_id}")
 
 
