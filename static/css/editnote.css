@@ -4,6 +4,10 @@
   text-decoration: none;
 }
 
+a {
+  color: #2C2C2C;
+}
+
 body {
   background-color: #f8f8f8;
 }
@@ -22,6 +26,15 @@ body {
   font-weight: 700;
   color: #2C2C2C;
   font-size: 18px;
+}
+
+.nav__breadcrumb {
+  font-size: 15px;
+  font-weight: 600;
+  color: #2C2C2C90;
+
+  margin-left: 10px;
+  cursor: pointer;
 }
 
 .main-section {

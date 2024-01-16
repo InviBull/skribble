@@ -48,8 +48,8 @@ def retrieve_notebook(notebook_id):
 
         if len(note) == 0:
             return render_template('error.html', message="Note Not Found")
-
-        return render_template('editnote.html', name=current_user.name, notebook_id=notebook_id, notebook=notebook, notes=notes)
+        
+        return render_template('editnote.html', name=current_user.name, notebook_id=notebook_id, notebook=notebook, note=note[0])
 
 @notebooks.route('/<notebook_id>/notes', methods=['POST'])
 @login_required
@@ -66,6 +66,16 @@ def remove_note():
     note_id = request.form.get("note_id")
     delete_note(current_user.id, notebook_id, note_id)
     return redirect(f"/{notebook_id}")
+
+@notebooks.route('/notebooks/note/edit', methods=['PUT'])
+@login_required
+def update_note():
+    notebook_id = request.form.get("notebook_id")
+    note_id = request.form.get("note_id")
+    note_content = request.form.get("note_content")
+    print(notebook_id, note_id, note_content)
+    edit_note(current_user.id, notebook_id, note_id, note_content)
+    return redirect(f"/{notebook_id}?noteid={note_id}")
 
 
 

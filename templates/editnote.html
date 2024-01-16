@@ -8,58 +8,72 @@
   <body>
 
     <nav class="nav">
-      Skribble
+      <a href='/'>
+        Skribble
+      </a>
+      <p class="nav__breadcrumb">
+        /
+      </p>
+      <a href="/{{ notebook[1] }}">
+        <p class="nav__breadcrumb">
+          {{ notebook[2] }}
+        </p>
+      </a>
+      <p class="nav__breadcrumb">
+        /
+      </p>
+      <a href="/{{ notebook[1] }}?noteid={{ note[2] }}">
+        <p class="nav__breadcrumb">
+          {{ note[3] }}
+        </p>
+      </a>
     </nav>
 
     <section class="main-section">
-      <p>{{ notebook[2] }}</p>
-
-      {% for note in notes %}
-        <p>
-          <a href="/{{ notebook_id }}/{{ note[0] }}">{{ note[1] }}</a>
-        </p>
-      {% endfor %}
-      <div>
-        <button data-modal="new-page-modal">Create New Note</button>
+      <div class="main-section__content">
+        <p contenteditable="true" id="main-section__note">{{ note[4] }}</p>
       </div>
     </section>
-
-    <div class="modal" id="new-page-modal">
-      <div class="modal__bg modal__exit"></div>
-      <div class="modal__content">
-        <div class="modal__content__header">
-          <h2 class="modal__content__header__title">Create New Note</h2>
-        </div>
-        <div class="modal__content__body">
-          <form action="/{{ notebook_id }}/notes" method="POST">
-            <input class="modal__content__body__input" type="text" name="note_name" id="note_name" placeholder="Name" required>
-            <button class="modal__content__body__submit" type="submit">Create</button>
-          </form>
-        </div>
-      </div>
-    </div>
-
+    
     <script>
-      const modals = document.querySelectorAll('[data-modal]')
+      const notebook_id = '{{ notebook_id }}';
+      const note_id = '{{ note }}'[2];
 
-      modals.forEach((trigger) => {
-        trigger.addEventListener('click', (e) => {
-          e.preventDefault();
 
-          console.log('click')
-          const modal = document.getElementById(trigger.dataset.modal)
-          console.log(modal)
-          modal.classList.add('open')
+      // var debounce = function(func, wait, immediate) {
+      //   var timeout;
+      //   return function() {
+      //     var context = this, args = arguments;
+      //     var later = function() {
+      //       timeout = null;
+      //       if (!immediate) func.apply(context, args);
+      //     };
+      //     var callNow = immediate && !timeout;
+      //     clearTimeout(timeout);
+      //     timeout = setTimeout(later, wait || 200);
+      //     if (callNow) func.apply(context, args);
+      //   };
+      // };
 
-          const exits = modal.querySelectorAll('.modal__exit')
-          exits.forEach(exit => {
-            exit.addEventListener('click', e => {
-              e.preventDefault();
-              modal.classList.remove('open')
-            })
-          })
-        })
-      })
-    </script>
+      update_note = function() {
+        var data = {
+          'notebookid': notebook_id,
+          'noteid': note_id,
+          'note_content': document.querySelector('#main-section__note').innerHTML
+        };
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function() {
+          if (xhr.readyState === 4) {
+            console.log(xhr.status);
+            console.log(xhr.responseText);
+          }
+        };
+        xhr.open('PUT', '/notebooks/note/edit', true);
+        xhr.setRequestHeader('Content-Type', 'multipart/form-data');
+        xhr.send(data);
+      };
+      setInterval(update_note, 20000);
+      </script>
+
   </body>
 </html>
