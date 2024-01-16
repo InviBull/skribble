@@ -49,7 +49,7 @@ def retrieve_notebook(notebook_id):
         if len(note) == 0:
             return render_template('error.html', message="Note Not Found")
 
-        return render_template('editnote.html', name=current_user.name, notebook_id=notebook_id, notebook=notebook, notes=notes)
+        return render_template('editnote.html', name=current_user.name, notebook_id=notebook_id, notebook=notebook, notes=notes, note=note[0])
 
 @notebooks.route('/<notebook_id>/notes', methods=['POST'])
 @login_required

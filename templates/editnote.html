@@ -8,7 +8,25 @@
   <body>
 
     <nav class="nav">
-      Skribble
+      <a href='/'>
+        Skribble
+      </a>
+      <p class="nav__breadcrumb">
+        /
+      </p>
+      <a href="/{{ notebook[1] }}">
+        <p class="nav__breadcrumb">
+          {{ notebook[2] }}
+        </p>
+      </a>
+      <p class="nav__breadcrumb">
+        /
+      </p>
+      <a href="/{{ notebook[1] }}?noteid={{note[2]}}">
+        <p class="nav__breadcrumb">
+          {{ note[3] }}
+        </p>
+      </a>
     </nav>
 
     <section class="main-section">
