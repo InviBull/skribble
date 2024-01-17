@@ -45,27 +45,26 @@
           method: "PUT",
           body: formData,
         });
+        console.log("updated");
       }
 
-      function debounce(func, timeout) {
+      function debounce(func, delay = 2000) {
         let timer;
         return (...args) => {
-          if (!timer) {
-            func.apply(this, args);
-          }
           clearTimeout(timer);
           timer = setTimeout(() => {
-            timer = undefined;
-          }, timeout);
+            func.apply(this, args);
+          }, delay);
         };
       }
 
       const debouncedSaveNote = debounce((value) => {
+        console.log("notes changed");
         saveNote(value);
-      }, 2000);
+      });
 
       noteSection.addEventListener("input", (e) => {
-        debouncedSaveNote(e.target.value);
+        debouncedSaveNote(e.target.innerHTML);
       });
     </script>
   </body>
