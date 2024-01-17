@@ -2,30 +2,25 @@
 <html lang="en">
   <head>
     <title>Skribble</title>
-    <link rel="stylesheet" href="{{url_for('static', filename='css/editnote.css')}}"/>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter&wghts=100,200,300,400,500,600,700,800">
+    <link
+      rel="stylesheet"
+      href="{{url_for('static', filename='css/editnote.css')}}"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css?family=Inter&wghts=100,200,300,400,500,600,700,800"
+    />
   </head>
   <body>
-
     <nav class="nav">
-      <a href='/'>
-        Skribble
-      </a>
-      <p class="nav__breadcrumb">
-        /
-      </p>
+      <a href="/"> Skribble </a>
+      <p class="nav__breadcrumb">/</p>
       <a href="/{{ notebook[1] }}">
-        <p class="nav__breadcrumb">
-          {{ notebook[2] }}
-        </p>
+        <p class="nav__breadcrumb">{{ notebook[2] }}</p>
       </a>
-      <p class="nav__breadcrumb">
-        /
-      </p>
+      <p class="nav__breadcrumb">/</p>
       <a href="/{{ notebook[1] }}?noteid={{ note[2] }}">
-        <p class="nav__breadcrumb">
-          {{ note[3] }}
-        </p>
+        <p class="nav__breadcrumb">{{ note[3] }}</p>
       </a>
     </nav>
 
@@ -34,24 +29,44 @@
         <p contenteditable="true" id="main-section__note">{{ note[4] }}</p>
       </div>
     </section>
-    
+
     <script>
-      const notebook_id = '{{ notebook_id }}';
-      const note_id = '{{ note|tojson }}'.split(", ")[2].replaceAll('"', "");
-        
-      async function saveData() {
+      const notebook_id = "{{ notebook_id }}";
+      const note_id = "{{ note[2] }}";
+      const noteSection = document.querySelector("#main-section__note");
+
+      async function saveNote(value) {
         const formData = new FormData();
-        formData.append('notebook_id', notebook_id);
-        formData.append('note_id', note_id);
-        formData.append('note_content', document.getElementById("main-section__note").innerHTML);
+        formData.append("notebook_id", notebook_id);
+        formData.append("note_id", note_id);
+        formData.append("note_content", value);
 
-        const req = await fetch('/notebooks/note/edit', {
-          method: 'PUT',
-          body: formData
+        await fetch("/notebooks/note/edit", {
+          method: "PUT",
+          body: formData,
         });
-      };
-      setInterval(saveData, 5000);
-      </script>
+      }
 
+      function debounce(func, timeout) {
+        let timer;
+        return (...args) => {
+          if (!timer) {
+            func.apply(this, args);
+          }
+          clearTimeout(timer);
+          timer = setTimeout(() => {
+            timer = undefined;
+          }, timeout);
+        };
+      }
+
+      const debouncedSaveNote = debounce((value) => {
+        saveNote(value);
+      }, 2000);
+
+      noteSection.addEventListener("input", (e) => {
+        debouncedSaveNote(e.target.value);
+      });
+    </script>
   </body>
 </html>
