@@ -37,42 +37,20 @@
     
     <script>
       const notebook_id = '{{ notebook_id }}';
-      const note_id = '{{ note }}'[2];
+      const note_id = '{{ note|tojson }}'.split(", ")[2].replaceAll('"', "");
+        
+      async function saveData() {
+        const formData = new FormData();
+        formData.append('notebook_id', notebook_id);
+        formData.append('note_id', note_id);
+        formData.append('note_content', document.getElementById("main-section__note").innerHTML);
 
-
-      // var debounce = function(func, wait, immediate) {
-      //   var timeout;
-      //   return function() {
-      //     var context = this, args = arguments;
-      //     var later = function() {
-      //       timeout = null;
-      //       if (!immediate) func.apply(context, args);
-      //     };
-      //     var callNow = immediate && !timeout;
-      //     clearTimeout(timeout);
-      //     timeout = setTimeout(later, wait || 200);
-      //     if (callNow) func.apply(context, args);
-      //   };
-      // };
-
-      update_note = function() {
-        var data = {
-          'notebookid': notebook_id,
-          'noteid': note_id,
-          'note_content': document.querySelector('#main-section__note').innerHTML
-        };
-        var xhr = new XMLHttpRequest();
-        xhr.onreadystatechange = function() {
-          if (xhr.readyState === 4) {
-            console.log(xhr.status);
-            console.log(xhr.responseText);
-          }
-        };
-        xhr.open('PUT', '/notebooks/note/edit', true);
-        xhr.setRequestHeader('Content-Type', 'multipart/form-data');
-        xhr.send(data);
+        const req = await fetch('/notebooks/note/edit', {
+          method: 'PUT',
+          body: formData
+        });
       };
-      setInterval(update_note, 20000);
+      setInterval(saveData, 5000);
       </script>
 
   </body>
