@@ -72,9 +72,8 @@ def update_note():
     notebook_id = request.form.get("notebook_id")
     note_id = request.form.get("note_id")
     note_content = request.form.get("note_content")
-    print(notebook_id, note_id, note_content)
     edit_note(current_user.id, notebook_id, note_id, note_content)
-    return redirect(f"/{notebook_id}?noteid={note_id}")
+    return "OK"
 
 
 
