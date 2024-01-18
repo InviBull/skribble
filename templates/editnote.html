@@ -12,28 +12,9 @@
     />
   </head>
   <body>
-    <nav class="nav">
-      <a href="/"> Skribble </a>
-      <p class="nav__breadcrumb">/</p>
-      <a href="/{{ notebook[1] }}">
-        <p class="nav__breadcrumb">{{ notebook[2] }}</p>
-      </a>
-      <p class="nav__breadcrumb">/</p>
-      <a href="/{{ notebook[1] }}?noteid={{ note[2] }}">
-        <p class="nav__breadcrumb">{{ note[3] }}</p>
-      </a>
-    </nav>
-
-    <section class="main-section">
-      <div class="main-section__content">
-        <p contenteditable="true" id="main-section__note">{{ note[4] }}</p>
-      </div>
-    </section>
-
     <script>
       const notebook_id = "{{ notebook_id }}";
       const note_id = "{{ note[2] }}";
-      const noteSection = document.querySelector("#main-section__note");
 
       async function saveNote(value) {
         const formData = new FormData();
@@ -59,13 +40,98 @@
       }
 
       const debouncedSaveNote = debounce((value) => {
-        console.log("notes changed");
         saveNote(value);
       });
 
-      noteSection.addEventListener("input", (e) => {
-        debouncedSaveNote(e.target.innerHTML);
-      });
     </script>
+
+    <nav class="nav">
+      <a href="/"> Skribble </a>
+      <p class="nav__breadcrumb">/</p>
+      <a href="/{{ notebook[1] }}">
+        <p class="nav__breadcrumb">{{ notebook[2] }}</p>
+      </a>
+      <p class="nav__breadcrumb">/</p>
+      <a href="/{{ notebook[1] }}?noteid={{ note[2] }}">
+        <p class="nav__breadcrumb">{{ note[3] }}</p>
+      </a>
+    </nav>
+
+    <section class="main-section">
+      <div class="main-section__sidebar">
+        <p class="main-section__sidebar__nb">{{ notebook[2] }}</p>
+        <div>
+          {% for n in notes %}
+            <a href="/{{ notebook[1] }}?noteid={{ n[2] }}">
+              <div class="card {{ 'card--selected' if note[2] == n[2] }}">
+                <div class="card__leading">
+                  <span class="card__leading__name">{{ n[3] }}</span>
+                </div>
+                <div class="card__delete">
+                  <form action="/notebooks/note/delete" method="POST">
+                    <input type="hidden" name="notebook_id" value="{{ notebook[1] }}"/>
+                    <input type="hidden" name="note_id" value="{{ n[2] }}"/>
+                    <button type="submit" style="background: transparent; outline: none; border: none; cursor: pointer;">
+                      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M15.8334 3.33333H12.9167L12.0834 2.5H7.91675L7.08341 3.33333H4.16675V5H15.8334M5.00008 15.8333C5.00008 16.2754 5.17568 16.6993 5.48824 17.0118C5.8008 17.3244 6.22472 17.5 6.66675 17.5H13.3334C13.7754 17.5 14.1994 17.3244 14.5119 17.0118C14.8245 16.6993 15.0001 16.2754 15.0001 15.8333V5.83333H5.00008V15.8333Z" fill="#CF0303"/>
+                      </svg> 
+                    </button>
+                  </form>
+                </div>
+              </div>
+            </a>
+          {% endfor %}
+          <button data-modal="new-page-modal" class="new-notebook-button">
+            <p>New Page</p>
+            <svg width="20" height="20" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M20.5834 14.0833H14.0834V20.5833H11.9167V14.0833H5.41675V11.9167H11.9167V5.41667H14.0834V11.9167H20.5834V14.0833Z" fill="#245AE4"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="main-section__content">
+        <textarea placeholder="Write your content here..." value="{{ note[4] }}" oninput="debouncedSaveNote(this.value)">{{ note[4] }}</textarea>
+      </div>
+    </section>
+
+    <div class="modal" id="new-page-modal">
+      <div class="modal__bg modal__exit"></div>
+      <div class="modal__content">
+        <div class="modal__content__header">
+          <h2 class="modal__content__header__title">Create New Page</h2>
+        </div>
+        <div class="modal__content__body">
+          <form action="/{{ notebook_id }}/notes" method="POST">
+            <input class="modal__content__body__input" type="text" name="note_name" id="note_name" placeholder="Name" required>
+            <button class="modal__content__body__submit" type="submit">Create</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const modals = document.querySelectorAll('[data-modal]')
+
+      modals.forEach((trigger) => {
+        trigger.addEventListener('click', (e) => {
+          e.preventDefault();
+
+          console.log('click')
+          const modal = document.getElementById(trigger.dataset.modal)
+          console.log(modal)
+          modal.classList.add('open')
+
+          const exits = modal.querySelectorAll('.modal__exit')
+          exits.forEach(exit => {
+            exit.addEventListener('click', e => {
+              e.preventDefault();
+              modal.classList.remove('open')
+            })
+          })
+        })
+      })
+    </script>
+
   </body>
 </html>
