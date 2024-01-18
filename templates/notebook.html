@@ -27,6 +27,12 @@
         <p class="main-section__header__count">{{length}} Pages</p>
       </div>
       <div>
+        <button data-modal="new-page-modal" class="new-page-button">
+          <p>Create New Page</p>
+          <svg width="20" height="20" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20.5834 14.0833H14.0834V20.5833H11.9167V14.0833H5.41675V11.9167H11.9167V5.41667H14.0834V11.9167H20.5834V14.0833Z" fill="#245AE4"/>
+          </svg>
+        </button>
         {% for note in notes %}
           <a href="/{{ notebook[1] }}?noteid={{ note[2] }}">
             <div class="card">
@@ -50,12 +56,6 @@
             </div>
           </a>
         {% endfor %}
-        <button data-modal="new-page-modal" class="new-notebook-button">
-          <p>Create New Page</p>
-          <svg width="20" height="20" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M20.5834 14.0833H14.0834V20.5833H11.9167V14.0833H5.41675V11.9167H11.9167V5.41667H14.0834V11.9167H20.5834V14.0833Z" fill="#245AE4"/>
-          </svg>
-        </button>
       </div>
     </section>
 
