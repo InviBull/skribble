@@ -12,6 +12,10 @@ body {
   background-color: #f8f8f8;
 }
 
+.hidden {
+  display: none;
+}
+
 .nav {
   width: 100vw;
   height: 60px;
@@ -98,7 +102,7 @@ body {
   font-weight: 600;
 }
 
-.card--selected{
+.card--selected {
   border: 2px solid rgba(36, 90, 228, 0.10);
   background: rgba(36, 90, 228, 0.10);
 }
@@ -176,7 +180,7 @@ body {
 
 .modal__content__body__submit {
   border-radius: 8px;
-  background: #245AE4; 
+  background: #245AE4;
   border: none;
   outline: none;
   padding: 14px 22px;
@@ -197,5 +201,3 @@ body {
   background: #FFF;
   padding: 0 10px;
 }
-
-

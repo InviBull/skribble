@@ -42,7 +42,6 @@
       const debouncedSaveNote = debounce((value) => {
         saveNote(value);
       });
-
     </script>
 
     <nav class="nav">
@@ -57,43 +56,161 @@
       </a>
     </nav>
 
-      <div class="main-section__sidebar">
-        <p class="main-section__sidebar__nb">{{ notebook[2] }}</p>
-        <div>
-          {% for n in notes %}
-            <a href="/{{ notebook[1] }}?noteid={{ n[2] }}">
-              <div class="card {{ 'card--selected' if note[2] == n[2] }}">
-                <div class="card__leading">
-                  <span class="card__leading__name">{{ n[3] }}</span>
-                </div>
-                <div class="card__delete">
-                  <form action="/notebooks/note/delete" method="POST">
-                    <input type="hidden" name="notebook_id" value="{{ notebook[1] }}"/>
-                    <input type="hidden" name="note_id" value="{{ n[2] }}"/>
-                    <button type="submit" style="background: transparent; outline: none; border: none; cursor: pointer;">
-                      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M15.8334 3.33333H12.9167L12.0834 2.5H7.91675L7.08341 3.33333H4.16675V5H15.8334M5.00008 15.8333C5.00008 16.2754 5.17568 16.6993 5.48824 17.0118C5.8008 17.3244 6.22472 17.5 6.66675 17.5H13.3334C13.7754 17.5 14.1994 17.3244 14.5119 17.0118C14.8245 16.6993 15.0001 16.2754 15.0001 15.8333V5.83333H5.00008V15.8333Z" fill="#CF0303"/>
-                      </svg> 
-                    </button>
-                  </form>
-                </div>
-              </div>
-            </a>
-          {% endfor %}
-          <button data-modal="new-page-modal" class="new-notebook-button">
-            <p>New Page</p>
-            <svg width="20" height="20" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M20.5834 14.0833H14.0834V20.5833H11.9167V14.0833H5.41675V11.9167H11.9167V5.41667H14.0834V11.9167H20.5834V14.0833Z" fill="#245AE4"/>
-            </svg>
-          </button>
-        </div>
+    <div class="main-section__sidebar">
+      <p class="main-section__sidebar__nb">{{ notebook[2] }}</p>
+      <div>
+        {% for n in notes %}
+        <a href="/{{ notebook[1] }}?noteid={{ n[2] }}">
+          <div class="card {{ 'card--selected' if note[2] == n[2] }}">
+            <div class="card__leading">
+              <span class="card__leading__name">{{ n[3] }}</span>
+            </div>
+            <div class="card__delete">
+              <form action="/notebooks/note/delete" method="POST">
+                <input
+                  type="hidden"
+                  name="notebook_id"
+                  value="{{ notebook[1] }}"
+                />
+                <input type="hidden" name="note_id" value="{{ n[2] }}" />
+                <button
+                  type="submit"
+                  style="
+                    background: transparent;
+                    outline: none;
+                    border: none;
+                    cursor: pointer;
+                  "
+                >
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 20 20"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M15.8334 3.33333H12.9167L12.0834 2.5H7.91675L7.08341 3.33333H4.16675V5H15.8334M5.00008 15.8333C5.00008 16.2754 5.17568 16.6993 5.48824 17.0118C5.8008 17.3244 6.22472 17.5 6.66675 17.5H13.3334C13.7754 17.5 14.1994 17.3244 14.5119 17.0118C14.8245 16.6993 15.0001 16.2754 15.0001 15.8333V5.83333H5.00008V15.8333Z"
+                      fill="#CF0303"
+                    />
+                  </svg>
+                </button>
+              </form>
+            </div>
+          </div>
+        </a>
+        {% endfor %}
+        <button data-modal="new-page-modal" class="new-notebook-button">
+          <p>New Page</p>
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 26 26"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M20.5834 14.0833H14.0834V20.5833H11.9167V14.0833H5.41675V11.9167H11.9167V5.41667H14.0834V11.9167H20.5834V14.0833Z"
+              fill="#245AE4"
+            />
+          </svg>
+        </button>
       </div>
+    </div>
 
     <section class="main-section">
       <div class="main-section__content">
-        <textarea placeholder="Write your content here..." value="{{ note[4] }}" oninput="debouncedSaveNote(this.value)">{{ note[4] }}</textarea>
+        <textarea
+          id="main-section__editor"
+          placeholder="Write your content here..."
+          value="{{ note[4] }}"
+          oninput="debouncedSaveNote(this.value)"
+        >
+{{ note[4] }}</textarea
+        >
+        <div class="formatting-buttons">
+          <button class="formatting-button hidden" data-format="bold">
+            Bold
+          </button>
+          <button class="formatting-button hidden" data-format="italic">
+            Italic
+          </button>
+        </div>
       </div>
     </section>
+
+    <script>
+      const textarea = document.getElementById("main-section__editor");
+      const formattingButtons = document.querySelectorAll(".formatting-button");
+
+      formattingButtons.forEach((button) => {
+        button.addEventListener("click", (e) => {
+          applyFormatting(e);
+        });
+      });
+      document.addEventListener("selectionchange", handleTextSelection);
+
+      function showFormattingButtons() {
+        formattingButtons.forEach((button) =>
+          button.classList.remove("hidden")
+        );
+      }
+
+      function hideFormattingButtons() {
+        formattingButtons.forEach((button) => button.classList.add("hidden"));
+      }
+
+      function handleTextSelection() {
+        const activeElement = document.activeElement;
+        if (activeElement && activeElement.tagName === "TEXTAREA") {
+          const selectedText = activeElement.value.substring(
+            activeElement.selectionStart,
+            activeElement.selectionEnd
+          );
+
+          if (selectedText) {
+            showFormattingButtons();
+            console.log("Selected text:", selectedText);
+          } else {
+            hideFormattingButtons();
+          }
+        }
+      }
+
+      function applyFormatting(event) {
+        const format = event.target.dataset.format;
+
+        let selectionStart = textarea.selectionStart;
+        let selectionEnd = textarea.selectionEnd;
+        let selectedText = textarea.value.substring(
+          selectionStart,
+          selectionEnd
+        );
+        if (!selectedText) return;
+
+        if (format === "bold") {
+          textarea.value =
+            textarea.value.substring(0, selectionStart) +
+            "<b>" +
+            selectedText +
+            "</b>" +
+            textarea.value.substring(selectionEnd);
+        } else if (format === "italic") {
+          textarea.value =
+            textarea.value.substring(0, selectionStart) +
+            "<i>" +
+            selectedText +
+            "</i>" +
+            textarea.value.substring(selectionEnd);
+        }
+
+        selectionStart = selectionEnd =
+          selectionStart + selectedText.length + 4;
+
+        hideFormattingButtons();
+        debouncedSaveNote(textarea.value);
+      }
+    </script>
 
     <div class="modal" id="new-page-modal">
       <div class="modal__bg modal__exit"></div>
@@ -103,35 +220,43 @@
         </div>
         <div class="modal__content__body">
           <form action="/{{ notebook_id }}/notes" method="POST">
-            <input class="modal__content__body__input" type="text" name="note_name" id="note_name" placeholder="Name" required>
-            <button class="modal__content__body__submit" type="submit">Create</button>
+            <input
+              class="modal__content__body__input"
+              type="text"
+              name="note_name"
+              id="note_name"
+              placeholder="Name"
+              required
+            />
+            <button class="modal__content__body__submit" type="submit">
+              Create
+            </button>
           </form>
         </div>
       </div>
     </div>
 
     <script>
-      const modals = document.querySelectorAll('[data-modal]')
+      const modals = document.querySelectorAll("[data-modal]");
 
       modals.forEach((trigger) => {
-        trigger.addEventListener('click', (e) => {
+        trigger.addEventListener("click", (e) => {
           e.preventDefault();
 
-          console.log('click')
-          const modal = document.getElementById(trigger.dataset.modal)
-          console.log(modal)
-          modal.classList.add('open')
+          console.log("click");
+          const modal = document.getElementById(trigger.dataset.modal);
+          console.log(modal);
+          modal.classList.add("open");
 
-          const exits = modal.querySelectorAll('.modal__exit')
-          exits.forEach(exit => {
-            exit.addEventListener('click', e => {
+          const exits = modal.querySelectorAll(".modal__exit");
+          exits.forEach((exit) => {
+            exit.addEventListener("click", (e) => {
               e.preventDefault();
-              modal.classList.remove('open')
-            })
-          })
-        })
-      })
+              modal.classList.remove("open");
+            });
+          });
+        });
+      });
     </script>
-
   </body>
 </html>
