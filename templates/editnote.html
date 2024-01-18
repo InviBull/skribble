@@ -42,6 +42,31 @@
       const debouncedSaveNote = debounce((value) => {
         saveNote(value);
       });
+
+      function auto_grow(element) {
+        const scrollHeight = element.value.split("\n").length * 40;
+        const windowHeight = window.innerHeight - 200;
+        if(scrollHeight > windowHeight){
+           element.style.height = (element.scrollHeight) + "px";
+        }else{
+           element.style.height = windowHeight + "px";
+        }
+      }
+
+      async function updateTitle(value){
+        const formData = new FormData();
+        formData.append("notebook_id", notebook_id);
+        formData.append("note_id", note_id);
+        formData.append("new_title", value);
+
+        await fetch("/notebooks/note/editTitle", {
+          method: "PUT",
+          body: formData,
+        });
+
+        window.location.reload()
+      }
+
     </script>
 
     <nav class="nav">
@@ -120,97 +145,15 @@
 
     <section class="main-section">
       <div class="main-section__content">
+        <input value="{{ note[3]}}" class="main-section__title-editor" onblur="updateTitle(this.value)">
         <textarea
           id="main-section__editor"
+          class="main-section__editor"
           placeholder="Write your content here..."
           value="{{ note[4] }}"
-          oninput="debouncedSaveNote(this.value)"
-        >
-{{ note[4] }}</textarea
-        >
-        <div class="formatting-buttons">
-          <button class="formatting-button hidden" data-format="bold">
-            Bold
-          </button>
-          <button class="formatting-button hidden" data-format="italic">
-            Italic
-          </button>
-        </div>
-      </div>
+          oninput="debouncedSaveNote(this.value); auto_grow(this);"
+        >{{ note[4] }}</textarea>
     </section>
-
-    <script>
-      const textarea = document.getElementById("main-section__editor");
-      const formattingButtons = document.querySelectorAll(".formatting-button");
-
-      formattingButtons.forEach((button) => {
-        button.addEventListener("click", (e) => {
-          applyFormatting(e);
-        });
-      });
-      document.addEventListener("selectionchange", handleTextSelection);
-
-      function showFormattingButtons() {
-        formattingButtons.forEach((button) =>
-          button.classList.remove("hidden")
-        );
-      }
-
-      function hideFormattingButtons() {
-        formattingButtons.forEach((button) => button.classList.add("hidden"));
-      }
-
-      function handleTextSelection() {
-        const activeElement = document.activeElement;
-        if (activeElement && activeElement.tagName === "TEXTAREA") {
-          const selectedText = activeElement.value.substring(
-            activeElement.selectionStart,
-            activeElement.selectionEnd
-          );
-
-          if (selectedText) {
-            showFormattingButtons();
-            console.log("Selected text:", selectedText);
-          } else {
-            hideFormattingButtons();
-          }
-        }
-      }
-
-      function applyFormatting(event) {
-        const format = event.target.dataset.format;
-
-        let selectionStart = textarea.selectionStart;
-        let selectionEnd = textarea.selectionEnd;
-        let selectedText = textarea.value.substring(
-          selectionStart,
-          selectionEnd
-        );
-        if (!selectedText) return;
-
-        if (format === "bold") {
-          textarea.value =
-            textarea.value.substring(0, selectionStart) +
-            "<b>" +
-            selectedText +
-            "</b>" +
-            textarea.value.substring(selectionEnd);
-        } else if (format === "italic") {
-          textarea.value =
-            textarea.value.substring(0, selectionStart) +
-            "<i>" +
-            selectedText +
-            "</i>" +
-            textarea.value.substring(selectionEnd);
-        }
-
-        selectionStart = selectionEnd =
-          selectionStart + selectedText.length + 4;
-
-        hideFormattingButtons();
-        debouncedSaveNote(textarea.value);
-      }
-    </script>
 
     <div class="modal" id="new-page-modal">
       <div class="modal__bg modal__exit"></div>

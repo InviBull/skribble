@@ -66,6 +66,9 @@ def add_note(user_id, notebook_id, note_id, note_name, note_content = ""):
 def edit_note(user_id, notebook_id, note_id, note_content):
     mutate("UPDATE notes SET note_content = ? WHERE user_id = ? AND notebook_id = ? AND note_id = ?", (note_content, user_id, notebook_id, note_id))
 
+def edit_note_title(user_id, notebook_id, note_id, note_title):
+    mutate("UPDATE notes SET note_name = ? WHERE user_id = ? AND notebook_id = ? AND note_id = ?", (note_title, user_id, notebook_id, note_id))
+
 def delete_note(user_id, notebook_id, note_id):
     mutate("DELETE FROM notes WHERE user_id = ? AND notebook_id = ? AND note_id = ?", (user_id, notebook_id, note_id))
 

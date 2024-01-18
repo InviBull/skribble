@@ -32,6 +32,17 @@ def update_note():
     return "OK"
 
 
+@pages.route('/notebooks/note/editTitle', methods=['PUT'])
+@login_required
+def update_noteTitle():
+    print('update title req')
+    notebook_id = request.form.get("notebook_id")
+    note_id = request.form.get("note_id")
+    note_content = request.form.get("new_title")
+    edit_note_title(current_user.id, notebook_id, note_id, note_content)
+    return "OK"
+
+
 
 
 
