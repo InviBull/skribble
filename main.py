@@ -14,6 +14,7 @@ from db.db import create_tables, query
 from routes.auth import auth
 from routes.landing import landing
 from routes.notebooks import notebooks
+from routes.notes import pages
 
 create_tables()
 
@@ -40,6 +41,7 @@ def health():
 app.register_blueprint(auth)
 app.register_blueprint(landing)
 app.register_blueprint(notebooks)
+app.register_blueprint(pages)
 
 # Refresh CSS
 @app.context_processor

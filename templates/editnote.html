@@ -57,7 +57,6 @@
       </a>
     </nav>
 
-    <section class="main-section">
       <div class="main-section__sidebar">
         <p class="main-section__sidebar__nb">{{ notebook[2] }}</p>
         <div>
@@ -90,6 +89,7 @@
         </div>
       </div>
 
+    <section class="main-section">
       <div class="main-section__content">
         <textarea placeholder="Write your content here..." value="{{ note[4] }}" oninput="debouncedSaveNote(this.value)">{{ note[4] }}</textarea>
       </div>
