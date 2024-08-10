@@ -31,7 +31,7 @@ def create_tables():
                     notebook_id TEXT,
                     note_id TEXT UNIQUE,
                     note_name TEXT,
-                    note_content TEXT,
+                    note_content LONGTEXT,
                     FOREIGN KEY (user_id) REFERENCES users(id),
                     FOREIGN KEY (notebook_id) REFERENCES notebooks(notebook_id)
                 );
