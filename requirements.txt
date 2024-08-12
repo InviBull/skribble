@@ -7,3 +7,4 @@ pyopenssl
 flask-login
 uuid
 requests
+mysql-connector-python
