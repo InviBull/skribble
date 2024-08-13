@@ -4,3 +4,4 @@ __pycache__/
 skribble.db
 /venv
 /.venv
+/.env

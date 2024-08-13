@@ -1,211 +1,243 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <title>Skribble</title>
-    <link
-      rel="stylesheet"
-      href="{{url_for('static', filename='css/editnote.css')}}"
-    />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css?family=Inter&wghts=100,200,300,400,500,600,700,800"
-    />
-  </head>
-  <body>
-    <script>
-      const notebook_id = "{{ notebook_id }}";
-      const note_id = "{{ note[2] }}";
 
-      async function saveNote(value) {
-        const formData = new FormData();
-        formData.append("notebook_id", notebook_id);
-        formData.append("note_id", note_id);
-        formData.append("note_content", value);
+<head>
+  <title>Skribble</title>
+  <link rel="stylesheet" href="{{url_for('static', filename='css/editnote.css')}}" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter&wghts=100,200,300,400,500,600,700,800" />
+</head>
 
-        await fetch("/notebooks/note/edit", {
-          method: "PUT",
-          body: formData,
-        });
-        console.log("updated");
+<body>
+  <script>
+    const notebook_id = "{{ notebook_id }}";
+    const note_id = "{{ note[2] }}";
+
+    async function saveNote(value) {
+      const formData = new FormData();
+      formData.append("notebook_id", notebook_id);
+      formData.append("note_id", note_id);
+      formData.append("note_content", value);
+
+      await fetch("/notebooks/note/edit", {
+        method: "PUT",
+        body: formData,
+      });
+      console.log("updated");
+    }
+
+    function debounce(func, delay = 2000) {
+      let timer;
+      return (...args) => {
+        clearTimeout(timer);
+        timer = setTimeout(() => {
+          func.apply(this, args);
+        }, delay);
+      };
+    }
+
+    const debouncedSaveNote = debounce((value) => {
+      saveNote(value);
+    });
+
+    function auto_grow(element) {
+      const scrollHeight = element.value.split("\n").length * 40;
+      const windowHeight = window.innerHeight - 200;
+      if (scrollHeight > windowHeight) {
+        element.style.height = element.scrollHeight + "px";
+      } else {
+        element.style.height = windowHeight + "px";
       }
+    }
 
-      function debounce(func, delay = 2000) {
-        let timer;
-        return (...args) => {
-          clearTimeout(timer);
-          timer = setTimeout(() => {
-            func.apply(this, args);
-          }, delay);
-        };
-      }
+    async function updateTitle(value) {
+      const formData = new FormData();
+      formData.append("notebook_id", notebook_id);
+      formData.append("note_id", note_id);
+      formData.append("new_title", value);
 
-      const debouncedSaveNote = debounce((value) => {
-        saveNote(value);
+      await fetch("/notebooks/note/editTitle", {
+        method: "PUT",
+        body: formData,
       });
 
-      function auto_grow(element) {
-        const scrollHeight = element.value.split("\n").length * 40;
-        const windowHeight = window.innerHeight - 200;
-        if (scrollHeight > windowHeight) {
-          element.style.height = element.scrollHeight + "px";
-        } else {
-          element.style.height = windowHeight + "px";
-        }
-      }
+      window.location.reload();
+    }
+  </script>
 
-      async function updateTitle(value) {
-        const formData = new FormData();
-        formData.append("notebook_id", notebook_id);
-        formData.append("note_id", note_id);
-        formData.append("new_title", value);
+  <nav class="nav">
+    <a href="/"> Skribble </a>
+    <p class="nav__breadcrumb">/</p>
+    <a href="/{{ notebook[1] }}">
+      <p class="nav__breadcrumb">{{ notebook[2] }}</p>
+    </a>
+    <p class="nav__breadcrumb">/</p>
+    <a href="/{{ notebook[1] }}?noteid={{ note[2] }}">
+      <p class="nav__breadcrumb">{{ note[3] }}</p>
+    </a>
+  </nav>
 
-        await fetch("/notebooks/note/editTitle", {
-          method: "PUT",
-          body: formData,
-        });
-
-        window.location.reload();
-      }
-    </script>
-
-    <nav class="nav">
-      <a href="/"> Skribble </a>
-      <p class="nav__breadcrumb">/</p>
-      <a href="/{{ notebook[1] }}">
-        <p class="nav__breadcrumb">{{ notebook[2] }}</p>
-      </a>
-      <p class="nav__breadcrumb">/</p>
-      <a href="/{{ notebook[1] }}?noteid={{ note[2] }}">
-        <p class="nav__breadcrumb">{{ note[3] }}</p>
-      </a>
-    </nav>
-
-    <div class="main-section__sidebar">
-      <p class="main-section__sidebar__nb">{{ notebook[2] }}</p>
-      <div>
-        {% for n in notes %}
-        <a href="/{{ notebook[1] }}?noteid={{ n[2] }}">
-          <div class="card {{ 'card--selected' if note[2] == n[2] }}">
-            <div class="card__leading">
-              <span class="card__leading__name">{{ n[3] }}</span>
-            </div>
-            <div class="card__delete">
-              <form action="/notebooks/note/delete" method="POST">
-                <input
-                  type="hidden"
-                  name="notebook_id"
-                  value="{{ notebook[1] }}"
-                />
-                <input type="hidden" name="note_id" value="{{ n[2] }}" />
-                <button
-                  type="submit"
-                  style="
+  <div class="main-section__sidebar">
+    <p class="main-section__sidebar__nb">{{ notebook[2] }}</p>
+    <div>
+      {% for n in notes %}
+      <a href="/{{ notebook[1] }}?noteid={{ n[2] }}">
+        <div class="card {{ 'card--selected' if note[2] == n[2] }}">
+          <div class="card__leading">
+            <span class="card__leading__name">{{ n[3] }}</span>
+          </div>
+          <div class="card__delete">
+            <form action="/notebooks/note/delete" method="POST">
+              <input type="hidden" name="notebook_id" value="{{ notebook[1] }}" />
+              <input type="hidden" name="note_id" value="{{ n[2] }}" />
+              <button type="submit" style="
                     background: transparent;
                     outline: none;
                     border: none;
                     cursor: pointer;
-                  "
-                >
-                  <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 20 20"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M15.8334 3.33333H12.9167L12.0834 2.5H7.91675L7.08341 3.33333H4.16675V5H15.8334M5.00008 15.8333C5.00008 16.2754 5.17568 16.6993 5.48824 17.0118C5.8008 17.3244 6.22472 17.5 6.66675 17.5H13.3334C13.7754 17.5 14.1994 17.3244 14.5119 17.0118C14.8245 16.6993 15.0001 16.2754 15.0001 15.8333V5.83333H5.00008V15.8333Z"
-                      fill="#CF0303"
-                    />
-                  </svg>
-                </button>
-              </form>
-            </div>
+                  ">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M15.8334 3.33333H12.9167L12.0834 2.5H7.91675L7.08341 3.33333H4.16675V5H15.8334M5.00008 15.8333C5.00008 16.2754 5.17568 16.6993 5.48824 17.0118C5.8008 17.3244 6.22472 17.5 6.66675 17.5H13.3334C13.7754 17.5 14.1994 17.3244 14.5119 17.0118C14.8245 16.6993 15.0001 16.2754 15.0001 15.8333V5.83333H5.00008V15.8333Z"
+                    fill="#CF0303" />
+                </svg>
+              </button>
+            </form>
           </div>
-        </a>
-        {% endfor %}
-        <button data-modal="new-page-modal" class="new-notebook-button">
-          <p>New Page</p>
-          <svg
-            width="20"
-            height="20"
-            viewBox="0 0 26 26"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M20.5834 14.0833H14.0834V20.5833H11.9167V14.0833H5.41675V11.9167H11.9167V5.41667H14.0834V11.9167H20.5834V14.0833Z"
-              fill="#245AE4"
-            />
-          </svg>
-        </button>
-      </div>
-    </div>
-
-    <section class="main-section">
-      <div class="main-section__content">
-        <input
-          value="{{ note[3]}}"
-          class="main-section__title-editor"
-          onblur="updateTitle(this.value)"
-        />
-        <textarea
-          id="main-section__editor"
-          class="main-section__editor"
-          placeholder="Write your content here..."
-          value="{{ note[4] }}"
-          oninput="debouncedSaveNote(this.value); auto_grow(this);"
-        >
-{{ note[4] }}</textarea
-        >
-      </div>
-    </section>
-
-    <div class="modal" id="new-page-modal">
-      <div class="modal__bg modal__exit"></div>
-      <div class="modal__content">
-        <div class="modal__content__header">
-          <h2 class="modal__content__header__title">Create New Page</h2>
         </div>
-        <div class="modal__content__body">
-          <form action="/{{ notebook_id }}/notes" method="POST">
-            <input
-              class="modal__content__body__input"
-              type="text"
-              name="note_name"
-              id="note_name"
-              placeholder="Name"
-              required
-            />
-            <button class="modal__content__body__submit" type="submit">
-              Create
-            </button>
-          </form>
+      </a>
+      {% endfor %}
+      <button data-modal="new-page-modal" class="new-notebook-button">
+        <p>New Page</p>
+        <svg width="20" height="20" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M20.5834 14.0833H14.0834V20.5833H11.9167V14.0833H5.41675V11.9167H11.9167V5.41667H14.0834V11.9167H20.5834V14.0833Z"
+            fill="#245AE4" />
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <section class="main-section">
+    <div class="main-section__content">
+      <input value="{{ note[3]}}" class="main-section__title-editor" onblur="updateTitle(this.value);" />
+      <div class="main-section__container">
+        <textarea id="main-section__editor" class="main-section__editor" placeholder="Write your content here..."
+          value="{{ note[4] }}" oninput="debouncedSaveNote(this.value); auto_grow(this);"> {{ note[4] }}</textarea>
+        <div class="main-section__container__toolbar">
+          <button class="toolbar-button" data-format="bold">B</button>
         </div>
       </div>
+  </section>
+
+  <script>
+    const toolbar = document.querySelector(".main-section__container__toolbar");
+    const textarea = document.querySelector(".main-section__editor");
+
+    function showToolbar(start, end, text) {
+      const beforeSelection = document.createTextNode(text.substring(0, start));
+      const afterSelection = document.createTextNode(text.substring(start));
+
+      const toolElem = document.createElement("div");
+      toolElem.innerHTML = ' ';
+      const tempElem = document.createElement("div");
+      tempElem.innerHTML = ' ';
+
+      toolElem.appendChild(beforeSelection, tempElem, afterSelection);
+
+      const tempRect = tempElem.getBoundingClientRect();
+      const toolbarRect = toolbar.getBoundingClientRect();
+      const x = (textarea.clientWidth - toolbarRect.width) / 2;
+      const y = textarea.scrollTop + tempRect.top - toolbarRect.height - 8;
+
+      toolbar.style.transform = `translate(${x}px, ${y}px)`;
+      toolbar.style.opacity = 1;
+      toolbar.style.visibility = "visible";
+    }
+
+    function hideToolbar() {
+      toolbar.style.opacity = 0;
+      toolbar.style.visibility = "hidden";
+    }
+
+    function get_selection() {
+      const activeElem = document.activeElement;
+      if (activeElem && activeElem.tagName == "TEXTAREA") {
+        const start = activeElem.selectionStart;
+        const end = activeElem.selectionEnd;
+        const text = activeElem.value.substring(start, end);
+        return [start, end, text];
+      }
+      return null;
+    }
+
+    document.addEventListener("selectionchange", () => {
+      const selection = get_selection();
+      const [start, end, text] = selection;
+
+      if (text) showToolbar(start, end, text);
+      else hideToolbar();
+    });
+
+    [...document.querySelectorAll(".toolbar-button")].forEach(button => {
+      button.addEventListener("click", () => {
+        const format = button.getAttribute('data-format');
+
+        const [start, end] = [textarea.selectionStart, textarea.selectionEnd];
+        const text = textarea.value.substring(start, end);
+
+        switch (format) {
+          case "bold":
+            textarea.setRangeText(`**${text}**`, start, end, "end");
+            textarea.setSelectionRange(start, end + 4);
+            break;
+        }
+        textarea.focus();
+        hideToolbar();
+        debouncedSaveNote(textarea.value);
+      });
+    });
+  </script>
+
+  <div class="modal" id="new-page-modal">
+    <div class="modal__bg modal__exit"></div>
+    <div class="modal__content">
+      <div class="modal__content__header">
+        <h2 class="modal__content__header__title">Create New Page</h2>
+      </div>
+      <div class="modal__content__body">
+        <form action="/{{ notebook_id }}/notes" method="POST">
+          <input class="modal__content__body__input" type="text" name="note_name" id="note_name" placeholder="Name"
+            required />
+          <button class="modal__content__body__submit" type="submit">
+            Create
+          </button>
+        </form>
+      </div>
     </div>
+  </div>
 
-    <script>
-      const modals = document.querySelectorAll("[data-modal]");
+  <script>
+    const modals = document.querySelectorAll("[data-modal]");
 
-      modals.forEach((trigger) => {
-        trigger.addEventListener("click", (e) => {
-          e.preventDefault();
+    modals.forEach((trigger) => {
+      trigger.addEventListener("click", (e) => {
+        e.preventDefault();
 
-          console.log("click");
-          const modal = document.getElementById(trigger.dataset.modal);
-          console.log(modal);
-          modal.classList.add("open");
+        console.log("click");
+        const modal = document.getElementById(trigger.dataset.modal);
+        console.log(modal);
+        modal.classList.add("open");
 
-          const exits = modal.querySelectorAll(".modal__exit");
-          exits.forEach((exit) => {
-            exit.addEventListener("click", (e) => {
-              e.preventDefault();
-              modal.classList.remove("open");
-            });
+        const exits = modal.querySelectorAll(".modal__exit");
+        exits.forEach((exit) => {
+          exit.addEventListener("click", (e) => {
+            e.preventDefault();
+            modal.classList.remove("open");
           });
         });
       });
-    </script>
-  </body>
+    });
+  </script>
+</body>
+
 </html>

@@ -63,10 +63,10 @@ def googleCallback():
     else:
         return "Email not verified", 400
 
-    user = query("SELECT id FROM users where id = ?", (id,))
+    user = query("SELECT id FROM users where id = %s", (id,))
     if len(user) == 0:
-        mutate("INSERT INTO users (id, name, email, avatar) values (?, ?, ?, ?)", (id, name, email, avatar,))
-        user = query("SELECT id FROM users where id = ?", (id,))
+        mutate("INSERT INTO users (id, name, email, avatar) values (%s, %s, %s, %s)", (id, name, email, avatar,))
+        user = query("SELECT id FROM users where id = %s", (id,))
 
     login_user(User(user[0][0]))
     return redirect('/')

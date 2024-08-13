@@ -28,7 +28,7 @@ login_manager.login_view = '/'
 @login_manager.user_loader
 def load_user(userid):
     try:
-        u = query("SELECT * FROM users where id = ?", (userid,))[0]
+        u = query("SELECT * FROM users where id = %s", (userid,))[0]
         user = User(id=u[0], email=u[1], name=u[2], avatar=[3])
         return user
     except IndexError:

@@ -3,7 +3,7 @@ import mysql.connector
 def create_connection():
     return mysql.connector.connect(
         host="localhost",
-        user="your_username",
+        user="root",
         password="your_password",
         database="skribble"
     )
@@ -15,21 +15,21 @@ def create_tables():
         cur.execute(
             """
                 CREATE TABLE IF NOT EXISTS users (
-                    id TEXT PRIMARY KEY,
-                    email TEXT UNIQUE,
+                    id VARCHAR(36) PRIMARY KEY,
+                    email VARCHAR(320) UNIQUE,
                     name TEXT,
                     avatar TEXT
                 );
                 CREATE TABLE IF NOT EXISTS notebooks (
-                    user_id TEXT,
-                    notebook_id TEXT UNIQUE,
+                    user_id VARCHAR(255),
+                    notebook_id VARCHAR(36) PRIMARY KEY,
                     notebook_name TEXT,
                     FOREIGN KEY (user_id) REFERENCES users(id)
                 );
                 CREATE TABLE IF NOT EXISTS notes (
-                    user_id TEXT,
-                    notebook_id TEXT,
-                    note_id TEXT UNIQUE,
+                    user_id VARCHAR(255),
+                    notebook_id VARCHAR(36),
+                    note_id VARCHAR(36) PRIMARY KEY,
                     note_name TEXT,
                     note_content LONGTEXT,
                     FOREIGN KEY (user_id) REFERENCES users(id),
