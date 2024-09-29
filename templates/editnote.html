@@ -123,80 +123,8 @@
       <div class="main-section__container">
         <textarea id="main-section__editor" class="main-section__editor" placeholder="Write your content here..."
           value="{{ note[4] }}" oninput="debouncedSaveNote(this.value); auto_grow(this);"> {{ note[4] }}</textarea>
-        <div class="main-section__container__toolbar">
-          <button class="toolbar-button" data-format="bold">B</button>
-        </div>
       </div>
   </section>
-
-  <script>
-    const toolbar = document.querySelector(".main-section__container__toolbar");
-    const textarea = document.querySelector(".main-section__editor");
-
-    function showToolbar(start, end, text) {
-      const beforeSelection = document.createTextNode(text.substring(0, start));
-      const afterSelection = document.createTextNode(text.substring(start));
-
-      const toolElem = document.createElement("div");
-      toolElem.innerHTML = ' ';
-      const tempElem = document.createElement("div");
-      tempElem.innerHTML = ' ';
-
-      toolElem.appendChild(beforeSelection, tempElem, afterSelection);
-
-      const tempRect = tempElem.getBoundingClientRect();
-      const toolbarRect = toolbar.getBoundingClientRect();
-      const x = (textarea.clientWidth - toolbarRect.width) / 2;
-      const y = textarea.scrollTop + tempRect.top - toolbarRect.height - 8;
-
-      toolbar.style.transform = `translate(${x}px, ${y}px)`;
-      toolbar.style.opacity = 1;
-      toolbar.style.visibility = "visible";
-    }
-
-    function hideToolbar() {
-      toolbar.style.opacity = 0;
-      toolbar.style.visibility = "hidden";
-    }
-
-    function get_selection() {
-      const activeElem = document.activeElement;
-      if (activeElem && activeElem.tagName == "TEXTAREA") {
-        const start = activeElem.selectionStart;
-        const end = activeElem.selectionEnd;
-        const text = activeElem.value.substring(start, end);
-        return [start, end, text];
-      }
-      return null;
-    }
-
-    document.addEventListener("selectionchange", () => {
-      const selection = get_selection();
-      const [start, end, text] = selection;
-
-      if (text) showToolbar(start, end, text);
-      else hideToolbar();
-    });
-
-    [...document.querySelectorAll(".toolbar-button")].forEach(button => {
-      button.addEventListener("click", () => {
-        const format = button.getAttribute('data-format');
-
-        const [start, end] = [textarea.selectionStart, textarea.selectionEnd];
-        const text = textarea.value.substring(start, end);
-
-        switch (format) {
-          case "bold":
-            textarea.setRangeText(`**${text}**`, start, end, "end");
-            textarea.setSelectionRange(start, end + 4);
-            break;
-        }
-        textarea.focus();
-        hideToolbar();
-        debouncedSaveNote(textarea.value);
-      });
-    });
-  </script>
 
   <div class="modal" id="new-page-modal">
     <div class="modal__bg modal__exit"></div>

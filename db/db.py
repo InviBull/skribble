@@ -4,7 +4,7 @@ def create_connection():
     return mysql.connector.connect(
         host="localhost",
         user="root",
-        password="your_password",
+        password="1234",
         database="skribble"
     )
 
@@ -57,6 +57,7 @@ def add_notebook(user_id, notebook_id, notebook_name):
     mutate("INSERT INTO notebooks VALUES (%s, %s, %s)", (user_id, notebook_id, notebook_name))
 
 def delete_notebook(user_id, notebook_id):
+    mutate("DELETE FROM notes WHERE user_id = %s AND notebook_id = %s", (user_id, notebook_id))
     mutate("DELETE FROM notebooks WHERE user_id = %s AND notebook_id = %s", (user_id, notebook_id))
 
 def get_notebooks(user_id):
