@@ -12,8 +12,7 @@ def create_tables():
     conn = create_connection()
     with conn:
         cur = conn.cursor()
-        cur.execute(
-            """
+        cmd = """
                 CREATE TABLE IF NOT EXISTS users (
                     id VARCHAR(36) PRIMARY KEY,
                     email VARCHAR(320) UNIQUE,
@@ -35,11 +34,13 @@ def create_tables():
                     FOREIGN KEY (user_id) REFERENCES users(id),
                     FOREIGN KEY (notebook_id) REFERENCES notebooks(notebook_id)
                 );
-            """,
-            multi=True
-        )
+            """
+        
+        for result in cur.execute(cmd,multi=True):
+            if result.with_rows:
+                result.fetchall()
+
         conn.commit()
-        conn.close()
 
 def query(query, params=()):
     conn = create_connection()
