@@ -1,7 +1,8 @@
-__pycache__/
+  
 *.py[cod]
 *$py.class
 skribble.db
 /venv
 /.venv
 /.env
+.env
