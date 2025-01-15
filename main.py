@@ -23,13 +23,13 @@ app.secret_key = env("SECRET_KEY")
 
 login_manager = LoginManager()
 login_manager.init_app(app)
-login_manager.login_view = '/'
+login_manager.login_view = '/' # type: ignore
 
 @login_manager.user_loader
 def load_user(userid):
     try:
         u = query("SELECT * FROM users where id = %s", (userid,))[0]
-        user = User(id=u[0], email=u[1], name=u[2], avatar=[3])
+        user = User(id=u[0], email=u[1], name=u[2], avatar=u[3]) # type: ignore
         return user
     except IndexError:
         return None

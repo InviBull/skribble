@@ -9,7 +9,7 @@ landing = Blueprint('landing', __name__, template_folder='templates')
 def landingPage():
     if current_user.is_authenticated:
         notebooks = get_notebooks(current_user.id) 
-        print(notebooks)
-        return render_template('index.html', length=len(notebooks), notebooks=notebooks)
+        print(current_user.get_avatar())
+        return render_template('index.html', length=len(notebooks), notebooks=notebooks, user_avatar=current_user.get_avatar())
     else:
         return render_template('landing.html')

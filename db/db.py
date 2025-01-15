@@ -4,7 +4,7 @@ def create_connection():
     return mysql.connector.connect(
         host="localhost",
         user="root",
-        password="1234",
+        password="password",
         database="skribble"
     )
 
@@ -35,8 +35,11 @@ def create_tables():
                     FOREIGN KEY (user_id) REFERENCES users(id),
                     FOREIGN KEY (notebook_id) REFERENCES notebooks(notebook_id)
                 );
-            """
+            """,
+            multi=True
         )
+        conn.commit()
+        conn.close()
 
 def query(query, params=()):
     conn = create_connection()
@@ -57,29 +60,29 @@ def add_notebook(user_id, notebook_id, notebook_name):
     mutate("INSERT INTO notebooks VALUES (%s, %s, %s)", (user_id, notebook_id, notebook_name))
 
 def delete_notebook(user_id, notebook_id):
-    mutate("DELETE FROM notes WHERE user_id = %s AND notebook_id = %s", (user_id, notebook_id))
-    mutate("DELETE FROM notebooks WHERE user_id = %s AND notebook_id = %s", (user_id, notebook_id))
+    mutate("DELETE FROM notes WHERE user_id =%s AND notebook_id =%s", (user_id, notebook_id))
+    mutate("DELETE FROM notebooks WHERE user_id =%s AND notebook_id =%s", (user_id, notebook_id))
 
 def get_notebooks(user_id):
-    return query("SELECT * FROM notebooks WHERE user_id = %s", (user_id, ))
+    return query("SELECT * FROM notebooks WHERE user_id =%s", (user_id, ))
 
 def get_notebook(user_id, notebook_id):
-    return query("SELECT * FROM notebooks WHERE user_id = %s AND notebook_id = %s", (user_id, notebook_id))
+    return query("SELECT * FROM notebooks WHERE user_id =%s AND notebook_id =%s", (user_id, notebook_id))
 
 def add_note(user_id, notebook_id, note_id, note_name, note_content = ""):
     mutate("INSERT INTO notes VALUES (%s, %s, %s, %s, %s)", (user_id, notebook_id, note_id, note_name, note_content))
 
 def edit_note(user_id, notebook_id, note_id, note_content):
-    mutate("UPDATE notes SET note_content = %s WHERE user_id = %s AND notebook_id = %s AND note_id = %s", (note_content, user_id, notebook_id, note_id))
+    mutate("UPDATE notes SET note_content =%s WHERE user_id =%s AND notebook_id =%s AND note_id =%s", (note_content, user_id, notebook_id, note_id))
 
 def edit_note_title(user_id, notebook_id, note_id, note_title):
-    mutate("UPDATE notes SET note_name = %s WHERE user_id = %s AND notebook_id = %s AND note_id = %s", (note_title, user_id, notebook_id, note_id))
+    mutate("UPDATE notes SET note_name =%s WHERE user_id =%s AND notebook_id =%s AND note_id =%s", (note_title, user_id, notebook_id, note_id))
 
 def delete_note(user_id, notebook_id, note_id):
-    mutate("DELETE FROM notes WHERE user_id = %s AND notebook_id = %s AND note_id = %s", (user_id, notebook_id, note_id))
+    mutate("DELETE FROM notes WHERE user_id =%s AND notebook_id =%s AND note_id =%s", (user_id, notebook_id, note_id))
 
 def get_notes(user_id, notebook_id):
-    return query("SELECT * FROM notes WHERE user_id = %s AND notebook_id = %s", (user_id, notebook_id))
+    return query("SELECT * FROM notes WHERE user_id =%s AND notebook_id =%s", (user_id, notebook_id))
 
 def get_note(user_id, notebook_id, note_id):
-    return query("SELECT * FROM notes WHERE user_id = %s AND notebook_id = %s AND note_id = %s", (user_id, notebook_id, note_id))
+    return query("SELECT * FROM notes WHERE user_id =%s AND notebook_id =%s AND note_id =%s", (user_id, notebook_id, note_id))

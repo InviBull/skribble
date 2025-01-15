@@ -14,6 +14,7 @@ body {
   padding: 0 20px;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   border-bottom: solid 2px #E8E8E8;
   position: fixed;
   top: 0;
@@ -22,6 +23,13 @@ body {
   font-weight: 700;
   color: #2C2C2C;
   font-size: 18px;
+}
+
+.nav__avatar {
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+  margin-right: 40px;
 }
 
 .main-section {

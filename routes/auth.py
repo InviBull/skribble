@@ -68,7 +68,7 @@ def googleCallback():
         mutate("INSERT INTO users (id, name, email, avatar) values (%s, %s, %s, %s)", (id, name, email, avatar,))
         user = query("SELECT id FROM users where id = %s", (id,))
 
-    login_user(User(user[0][0]))
+    login_user(User(user[0][0])) # type: ignore
     return redirect('/')
 
 @auth.route('/auth/logout')

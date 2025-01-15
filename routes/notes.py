@@ -28,6 +28,8 @@ def update_note():
     notebook_id = request.form.get("notebook_id")
     note_id = request.form.get("note_id")
     note_content = request.form.get("note_content")
+
+    print(note_content)
     edit_note(current_user.id, notebook_id, note_id, note_content)
     return "OK"
 

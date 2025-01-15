@@ -14,3 +14,6 @@ class User:
 
     def get_id(self):
         return self.id
+
+    def get_avatar(self):
+        return self.avatar

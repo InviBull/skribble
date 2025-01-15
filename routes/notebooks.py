@@ -36,7 +36,7 @@ def retrieve_notebook(notebook_id):
         return render_template('error.html', message="Notebook Not Found")
 
     notebook = notebook[0]
-    if notebook[0] != current_user.id:
+    if notebook[0] != current_user.id: #type: ignore
         return render_template('error.html', message="Unauthorised!")
 
     notes = get_notes(current_user.id, notebook_id)
